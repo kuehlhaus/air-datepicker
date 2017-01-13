@@ -1,5 +1,5 @@
 ;(function () {
-    var VERSION = '2.2.3',
+    var VERSION = '2.2.4',
         pluginName = 'datepicker',
         autoInitSelector = '.datepicker-here',
         $body, $datepickersContainer,
@@ -75,6 +75,7 @@
 
             // events
             onSelect: '',
+            onFocus: '',
             onShow: '',
             onHide: '',
             onChangeMonth: '',
@@ -984,7 +985,7 @@
             this.$el.trigger(event, args)
         },
 
-        _focusNextCell: function (keyCode, type) {
+        _focusNextCell: function (keyCode, type, preview) {
             type = type || this.cellType;
 
             var date = datepicker.getParsedDate(this._getFocusedDate()),
@@ -1028,6 +1029,11 @@
 
             this.focused = nd;
 
+            if (preview) {
+                return nd;
+            } else {
+                this.focused = nd;
+            }
         },
 
         _getFocusedDate: function () {
@@ -1171,7 +1177,39 @@
             // Arrows
             if (code >= 37 && code <= 40) {
                 e.preventDefault();
-                this._focusNextCell(code);
+                this.lastFocused = this._focused;
+                var nextfocused = this._focusNextCell(code, null, true);
+
+                if (this._isInRange(nextfocused, this.cellType) === false || nextfocused === this.minDate || nextfocused === this.maxDate) {
+                    this._focused = this.lastFocused;
+                    this._getCell(this._focused, this.cellType).focus();
+                    return;
+                } else {
+                    this._focusNextCell(code);
+                    var focusedDate = this._focused;
+                }
+
+                var parsedFocused = datepicker.getParsedDate(focusedDate),
+                    formattedDates,
+                    _this = this,
+                    dates = new Date(
+                        parsedFocused.year,
+                        parsedFocused.month,
+                        parsedFocused.date,
+                        parsedFocused.hours,
+                        parsedFocused.minutes
+                    );
+
+                    if (this._getCell(focusedDate, this.cellType).hasClass('-disabled-')) {
+                        this._onKeyDown(e);
+                        return;
+                    }
+
+                    formattedDates = [focusedDate].map(function (date) {
+                        return _this.formatDate(_this.loc.dateFormat, date)
+                    }).join(this.opts.multipleDatesSeparator);
+
+                this.opts.onFocus(formattedDates, dates, this);
             }
 
             // Enter
