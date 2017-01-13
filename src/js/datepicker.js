@@ -837,6 +837,8 @@
             this.visible = false;
             this.$el.blur();
 
+            this.$el.val(this._prevOnSelectValue);
+
             if (onHide) {
                 this._bindVisionEvents(onHide)
             }
@@ -1027,8 +1029,6 @@
                 nd = this.maxDate;
             }
 
-            this.focused = nd;
-
             if (preview) {
                 return nd;
             } else {
@@ -1209,7 +1209,7 @@
                         return _this.formatDate(_this.loc.dateFormat, date)
                     }).join(this.opts.multipleDatesSeparator);
 
-                this.opts.onFocus(formattedDates, dates, this);
+                this.$el.val(formattedDates)
             }
 
             // Enter
