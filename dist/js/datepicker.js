@@ -137,6 +137,11 @@
         this.maxRange = '';
         this._prevOnSelectValue = '';
 
+        this.$el.parent().attr('role', 'application');
+        this.$el.attr('aria-live', 'polite');
+        this.$el.attr('aria-atomic', true);
+        this.$el.attr('aria-relevant', 'additions');
+
         this.init()
     };
 
@@ -835,7 +840,9 @@
 
             this.inFocus = false;
             this.visible = false;
-            this.$el.blur();
+            //this.$el.blur();
+
+            this.$el.trigger('blur.adp');
 
             this.$el.val(this._prevOnSelectValue);
 
@@ -1209,7 +1216,8 @@
                         return _this.formatDate(_this.loc.dateFormat, date)
                     }).join(this.opts.multipleDatesSeparator);
 
-                this.$el.val(formattedDates)
+                this.$el.val(formattedDates);
+                this.$el[0].select();
             }
 
             // Enter
