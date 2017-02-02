@@ -15,6 +15,7 @@
             inline: false,
             language: 'ru',
             startDate: new Date(),
+            selectedDate: null,
             firstDay: '',
             weekends: [6, 0],
             dateFormat: '',
@@ -130,7 +131,13 @@
         this.currentDate = this.opts.startDate;
         this.currentView = this.opts.view;
         this._createShortCuts();
-        this.selectedDates = [];
+
+       if (this.opts.selectedDate) {
+            this.selectedDates = [this.opts.selectedDate];
+        } else {
+            this.selectedDates = [];
+        }
+
         this.views = {};
         this.keys = [];
         this.minRange = '';
