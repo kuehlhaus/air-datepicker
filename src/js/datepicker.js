@@ -15,7 +15,6 @@
             inline: false,
             language: 'ru',
             startDate: new Date(),
-            selectedDate: null,
             firstDay: '',
             weekends: [6, 0],
             dateFormat: '',
@@ -131,13 +130,7 @@
         this.currentDate = this.opts.startDate;
         this.currentView = this.opts.view;
         this._createShortCuts();
-
-       if (this.opts.selectedDate) {
-            this.selectedDates = [this.opts.selectedDate];
-        } else {
-            this.selectedDates = [];
-        }
-
+        this.selectedDates = [];
         this.views = {};
         this.keys = [];
         this.minRange = '';
@@ -457,13 +450,14 @@
         },
 
 
-        selectDate: function (date) {
+        selectDate: function (date, options) {
             var _this = this,
                 opts = _this.opts,
                 d = _this.parsedDate,
                 selectedDates = _this.selectedDates,
                 len = selectedDates.length,
-                newDate = '';
+                newDate = '',
+                options = options || {};
 
             if (Array.isArray(date)) {
                 date.forEach(function (d) {
@@ -482,7 +476,9 @@
             }
 
             // On this step timepicker will set valid values in it's instance
-            _this._trigger('selectDate', date);
+            if (!options.silent) {
+                _this._trigger('selectDate', date);
+            }
 
             // Set correct time values after timepicker's validation
             // Prevent from setting hours or minutes which values are lesser then `min` value or
