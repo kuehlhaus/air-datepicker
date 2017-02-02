@@ -541,7 +541,7 @@
 
             _this._setInputValue();
 
-            if (opts.onSelect) {
+            if (opts.onSelect && !options.silent) {
                 _this._triggerOnChange();
             }
 
