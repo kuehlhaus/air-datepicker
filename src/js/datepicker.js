@@ -291,7 +291,9 @@
             this.$nav = $('.datepicker--nav', this.$datepicker);
         },
 
-        _triggerOnChange: function () {
+        _triggerOnChange: function (options) {
+            options = options || {};
+
             if (!this.selectedDates.length) {
                 // Prevent from triggering multiple onSelect callback with same argument (empty string) in IE10-11
                 if (this._prevOnSelectValue === '') return;
@@ -330,7 +332,10 @@
             }
 
             this._prevOnSelectValue = formattedDates;
-            this.opts.onSelect(formattedDates, dates, this);
+
+            if (!options.silent) {
+                this.opts.onSelect(formattedDates, dates, this);
+            }
         },
 
         next: function () {
@@ -476,9 +481,7 @@
             }
 
             // On this step timepicker will set valid values in it's instance
-            if (!options.silent) {
-                _this._trigger('selectDate', date);
-            }
+            _this._trigger('selectDate', date);
 
             // Set correct time values after timepicker's validation
             // Prevent from setting hours or minutes which values are lesser then `min` value or
@@ -541,8 +544,8 @@
 
             _this._setInputValue();
 
-            if (opts.onSelect && !options.silent) {
-                _this._triggerOnChange();
+            if (opts.onSelect) {
+                _this._triggerOnChange(options);
             }
 
             if (opts.autoClose && !this.timepickerIsActive) {
