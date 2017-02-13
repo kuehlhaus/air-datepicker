@@ -1193,7 +1193,7 @@
                 this.lastFocused = this._focused;
                 var nextfocused = this._focusNextCell(code, null, true);
 
-                if (this._isInRange(nextfocused, this.cellType) === false || nextfocused === this.minDate || nextfocused === this.maxDate) {
+                if (this._isInRange(nextfocused, this.cellType) === false || nextfocused.getTime() === this.minDate.getTime() || nextfocused.getTime() === this.maxDate.getTime()) {
                     this._focused = this.lastFocused;
                     this._getCell(this._focused, this.cellType).focus();
                     return;
