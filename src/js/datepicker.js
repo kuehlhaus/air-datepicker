@@ -1,5 +1,5 @@
 ;(function () {
-    var VERSION = '2.2.4',
+    var VERSION = '2.2.8',
         pluginName = 'datepicker',
         autoInitSelector = '.datepicker-here',
         $body, $datepickersContainer,
@@ -1186,14 +1186,14 @@
         _onKeyDown: function (e) {
             var code = e.which;
             this._registerKey(code);
+            e.preventDefault();
 
             // Arrows
             if (code >= 37 && code <= 40) {
-                e.preventDefault();
                 this.lastFocused = this._focused;
                 var nextfocused = this._focusNextCell(code, null, true);
 
-                if (this._isInRange(nextfocused, this.cellType) === false || nextfocused.getTime() === this.minDate.getTime() || nextfocused.getTime() === this.maxDate.getTime()) {
+                if (this._isInRange(nextfocused, this.cellType) === false || nextfocused.getTime() === this.minDate.getTime() - 86400000 || nextfocused.getTime() === this.maxDate.getTime() + 86400000) {
                     this._focused = this.lastFocused;
                     this._getCell(this._focused, this.cellType).focus();
                     return;
