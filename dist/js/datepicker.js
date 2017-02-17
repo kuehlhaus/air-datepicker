@@ -1,5 +1,5 @@
 ;(function (window, $, undefined) { ;(function () {
-    var VERSION = '2.2.8',
+    var VERSION = '2.2.9',
         pluginName = 'datepicker',
         autoInitSelector = '.datepicker-here',
         $body, $datepickersContainer,
@@ -1200,6 +1200,11 @@
                 } else {
                     this._focusNextCell(code);
                     var focusedDate = this._focused;
+
+                    if (this._getCell(focusedDate, this.cellType).hasClass('-disabled-')) {
+                        this._onKeyDown(e);
+                        return;
+                    }
                 }
 
                 var parsedFocused = datepicker.getParsedDate(focusedDate),
@@ -1212,11 +1217,6 @@
                         parsedFocused.hours,
                         parsedFocused.minutes
                     );
-
-                    if (this._getCell(focusedDate, this.cellType).hasClass('-disabled-')) {
-                        this._onKeyDown(e);
-                        return;
-                    }
 
                     formattedDates = [focusedDate].map(function (date) {
                         return _this.formatDate(_this.loc.dateFormat, date)
